@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Selamat Ulang Tahun, [Nama Pasangan]!</title>
+
+    <style>
+        /* Impor Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;700&family=Lato:wght@300;400;700&display=swap');
+
+        /* Palet Warna & Variabel */
+        :root {
+            --font-title: 'Pacifico', cursive;
+            --font-subtitle: 'Quicksand', sans-serif;
+            --font-body: 'Lato', sans-serif;
+            --color-bg-soft: #FFF0F5;
+            --color-bg-rose: #FBCFE8;
+            --color-accent-deep: #EC4899;
+            --color-text-dark: #581C87;
+            --color-text-light: #FFFFFF;
+        }
+
+        /* Pengaturan Dasar & Body */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text-dark);
+            background-color: var(--color-bg-soft);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Partikel Hati (Emoji) */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            top: -50px;
+            opacity: 0;
+            user-select: none;
+            animation: fall 10s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 0.7; }
+            100% { transform: translateY(110vh); opacity: 0; }
+        }
+
+        /* ===============================================================
+          1. BAGIAN PEMBUKA (HERO SECTION)
+          ===============================================================
+        */
+        #hero {
+            position: relative;
+            z-index: 3;
+            min-height: 100vh;
+            height: auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr; 
+            align-items: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.8), rgba(251, 207, 232, 0.8));
+            backdrop-filter: blur(2px);
+            overflow: hidden;
+        }
+        
+        .hero-main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            height: 100%;
+        }
+
+        .hero-content {
+            z-index: 10;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1.5s 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #hero h1 {
+            font-family: var(--font-title);
+            font-size: 4rem;
+            font-weight: 400;
+            color: var(--color-text-dark);
+            text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        #hero-button {
+            font-family: var(--font-subtitle);
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            background-color: var(--color-accent-deep);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #hero-button:hover {
+            transform: scale(1.1) rotate(-3deg);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.6);
+        }
+        
+        .hero-music-player {
+            margin-top: 2rem;
+        }
+
+        .hero-music-player p {
+            font-family: var(--font-subtitle);
+            font-weight: 500;
+            font-size: 1.1rem;
+            color: var(--color-accent-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-music-player audio {
+            width: 100%;
+            max-width: 350px;
+            filter: hue-rotate(300deg) contrast(1.1);
+        }
+        
+        /* CSS GRID FOTO DI HALAMAN AWAL (KOLOM KANAN) */
+        .hero-photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            opacity: 0;
+            animation: fadeIn 1.5s 1s forwards;
+        }
+        
+        .hero-photo-item {
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-photo-item:nth-child(odd) {
+            transform: rotate(-3deg);
+        }
+        .hero-photo-item:nth-child(even) {
+            transform: rotate(3deg);
+        }
+        .hero-photo-item:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 11;
+        }
+        
+        .hero-photo-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+       
+        /* ===============================================================
+          2. KONTEN UTAMA (YANG DI-SCROLL)
+          ===============================================================
+        */
+        main {
+            position: relative;
+            z-index: 2;
+            background-color: transparent;
+        }
+        
+        .content-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        h2 {
+            font-family: var(--font-subtitle);
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--color-accent-deep);
+            margin-bottom: 2.5rem;
+        }
+        
+        h3 {
+            font-family: var(--font-subtitle);
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--color-text-dark);
+            max-width: 600px;
+        }
+
+        /* ===============================================================
+          3. BAGIAN SURAT CINTA
+          ===============================================================
+        */
+        #love-letter {
+            display: none;
+            opacity: 0;
+            transition: opacity 1.5s ease-out;
+            background-color: #fff;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(236, 72, 153, 0.1);
+            margin: 4rem auto;
+        }
+
+        #love-letter.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        #love-letter p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            text-align: left;
+            max-width: 700px;
+            color: #444;
+        }
+        
+        .scroll-prompt {
+            margin-top: 2rem;
+            font-family: var(--font-subtitle);
+            font-size: 1.1rem;
+            color: var(--color-accent-deep);
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-prompt::after {
+            content: '↓';
+            display: block;
+            font-size: 2rem;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* ===============================================================
+          4. BAGIAN TRANSISI
+          ===============================================================
+        */
+        #transition-title {
+            min-height: 50vh;
+        }
+
+        /* ===============================================================
+          5. BAGIAN INTI: PERJALANAN KENANGAN
+          ===============================================================
+        */
+        .memory-journey {
+            /* Wrapper */
+        }
+        
+        .memory-item {
+            min-height: 80vh; 
+            padding: 2rem;
+            border-bottom: 2px dashed var(--color-bg-rose);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+        }
+        
+        /* FRAME FOTO (POLAROID) */
+        .photo-frame {
+            background: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 2rem;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .reveal-on-scroll:nth-child(odd) .photo-frame {
+             transform: rotate(-3deg);
+        }
+        .reveal-on-scroll:nth-child(even) .photo-frame {
+             transform: rotate(3deg);
+        }
+        .photo-frame:hover {
+            transform: rotate(0deg) scale(1.05) !important;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        
+        /* Ini untuk 1 FOTO BESAR */
+        .memory-item img {
+            width: 100%;
+            max-width: 500px;
+            height: auto; /* Biarkan tinggi otomatis */
+            max-height: 60vh;
+            object-fit: contain; /* Jangan dipotong */
+            border-radius: 8px;
+            display: block;
+        }
+        
+        .memory-item .caption {
+            font-family: var(--font-subtitle);
+            font-weight: 500;
+            font-size: 1.3rem;
+            color: #555;
+            font-style: italic;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        /* ===============================================================
+          PERUBAHAN CSS: GRID FOTO KENANGAN (UNTUK 2-5 FOTO)
+          ===============================================================
+        */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+            
+            /* INI BARIS BARU YANG PENTING */
+            align-items: start; /* Mencegah foto meregang (stretch) */
+        }
+        
+        .photo-grid .photo-frame {
+            margin-bottom: 0;
+        }
+        
+        /* KEDUA BARIS INI DIHAPUS agar tinggi foto otomatis:
+           height: 250px;
+           object-fit: cover;
+        */
+        .photo-grid .photo-frame img {
+             /* Gunakan gaya dari .memory-item img (di atas) */
+             max-width: 100%;
+             height: auto;
+             max-height: none; /* Hapus batasan tinggi di grid */
+             object-fit: contain;
+        }
+        
+        
+        /* LOGIKA FADE-IN SAAT SCROLL */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9) rotate(-4deg);
+            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotate(0deg);
+        }
+        
+        .reveal-on-scroll.visible:nth-child(odd) .photo-frame {
+             transform: rotate(-3deg);
+        }
+        .reveal-on-scroll.visible:nth-child(even) .photo-frame {
+             transform: rotate(3deg);
+        }
+
+        /* ===============================================================
+          6. BAGIAN KUPON "HADIAH"
+          ===============================================================
+        */
+        #coupon-section {
+            background-color: #fff;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(236, 72, 153, 0.1);
+            margin: 4rem auto;
+            width: calc(100% - 4rem);
+        }
+        
+        .coupon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 2rem;
+        }
+        
+        .coupon {
+            background: var(--color-bg-soft);
+            border: 3px dashed var(--color-accent-deep);
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            font-family: var(--font-subtitle);
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--color-text-dark);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .coupon:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.2);
+        }
+
+        /* ===============================================================
+          7. BAGIAN PENUTUP
+          ===============================================================
+        */
+        #footer {
+            background: linear-gradient(135deg, var(--color-bg-rose), var(--color-bg-soft));
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        #footer p {
+            font-family: var(--font-subtitle);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            margin-bottom: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #footer .final-heart {
+            font-size: 3rem;
+            color: var(--color-accent-deep);
+            line-height: 1;
+            margin-top: 1.5rem;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* ===============================================================
+          RESPONSIVE DESIGN (UNTUK PONSEL)
+          ===============================================================
+        */
+        @media (max-width: 768px) {
+            /* PERUBAHAN HERO DI HP */
+            #hero {
+                grid-template-columns: 1fr;
+                min-height: 100vh;
+                height: auto;
+                padding: 4rem 1rem;
+            }
+            #hero h1 {
+                font-size: 3rem;
+            }
+            .hero-main-content {
+                padding: 1rem;
+            }
+            .hero-photo-grid {
+                margin-top: 2rem;
+                padding: 0;
+            }
+            .hero-photo-item img {
+                height: 120px;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            .content-section {
+                padding: 3rem 1.5rem;
+                margin: 2rem auto;
+            }
+            #love-letter {
+                margin-top: 2rem;
+            }
+            #love-letter p {
+                font-size: 1.1rem;
+            }
+            .memory-item {
+                min-height: 70vh;
+                padding: 1.5rem;
+            }
+            .memory-item .caption {
+                font-size: 1.1rem;
+            }
+            #footer p {
+                font-size: 1.2rem;
+            }
+
+            .reveal-on-scroll:nth-child(odd) .photo-frame,
+            .reveal-on-scroll:nth-child(even) .photo-frame,
+            .photo-frame:hover {
+                transform: rotate(0deg) scale(1);
+            }
+            
+            /* PERUBAHAN GRID FOTO DI HP */
+            .photo-grid {
+                /* Di HP, buat jadi 2 kolom jika muat, jika tidak 1 */
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particle-container"></div>
+
+    <header id="hero">
+        
+        <div class="hero-main-content">
+            <div class="hero-content">
+                <h1>Selamat Ulang Tahun,<br>Nunus!</h1>
+    
+                <div class="hero-music-player">
+                    <p>Puter musik biar asik ✋🏿😎🤚🏿 ♫</p>
+                    <audio controls loop src="musikku.mp3">
+                        Browser Anda tidak mendukung audio.
+                    </audio>
+                </div>
+    
+                <button id="hero-button" style="margin-top: 2rem;">Klik ini ehe 💌</button>
+            </div>
+        </div>
+        
+        <div class="hero-photo-grid">
+            <div class="hero-photo-item">
+                <img src="nunusbioskop1.jpg" alt="Foto Awal 1">
+            </div>
+            <div class="hero-photo-item">
+                <img src="nunusbioskop2.jpg" alt="Foto Awal 2">
+            </div>
+            <div class="hero-photo-item">
+                <img src="nunusgatau.jpg" alt="Foto Awal 3">
+            </div>
+            <div class="hero-photo-item">
+                <img src="nunusinau.jpg" alt="Foto Awal 4">
+            </div>
+        </div>
+        
+    </header>
+
+    <main id="main-story">
+
+        <section id="love-letter" class="content-section">
+            <h2>💌 A Letter To My Love 💌</h2>
+            
+            <p>
+                Selamatt Ulang Tahunn/Barakallah fii Umrik/Happy Birthday Sayangggg!
+                <br><br>
+                Semogaaa dengann bertambah dan berkurangnyaa umur enih 💀, kamu bisaa menjadi pribadi yang jauh lebih baik yaaa sengg dalam segalaa hal. 
+                <br><br>
+                Semogaa apa yang memangg kamu citaa² kann dan inginkann bisa segeraa terwujud jugaaak (salah satunya menjadi anak punk😛)
+                <br><br>
+                Semogaa lancar dan dimudahkan selalu jugaaa dalam perkuliahann, bisa memahami materii dengan baik, ngerjainn tugas dan projek dengann lancar, bahkann ngerjainn ujian² sambil tutup mataa.
+                <br><br>
+                Semogaaa kamu selaluu beradaa di bawah lindungan Allah yaaaa dimana pun kamu beradaaa, biar amann tentram jauh dari bahaya wowok dan sahroni.
+                <br><br>
+                Semogaaa selalu diberikan kesehatann jugaaak, biar kamu bisaa bebas beraktivitas dann aktif dimana punn kamu beradaa, biar ortu dan aku jugaaa ga khawatir terus 😓 
+                <br><br>
+            </p>
+            
+            <p> 
+                Terimaa kasih jugaaa udah hadir di hidup akuuu, terima kasihh udah sesayangg itu samaa aku, udah selalu mikirinn akuu, udah peduli samaa aku, selalu jelasinn hal² secaraaa detail ke aku kalau aku lagi cemburuuu dan ngomelin kamu, udah sabar ngadepinn akuuu, dan masih banyak lagiii, aku masih ga nyangkaaa bisaa dapetinn perempuann kayak kamu, cantik, cakep, imoet, lucu, baik, perhatian, cemburuan, sayang samaaa akuuu, dll. karenaa jujur dulu bahkan aku mikir temenann pun gabakalan bisaaa sama kamu, jadii aku sangattt bersyukur adaa kamu di hidupkuu saatt iniii😓 AAAAKKK aku gapernah merasaa sangatt disayangg selain samaa kamu 
+            <br><br></p>
+
+            <p> 
+                Maaf jugaa kalau aku selamaa ini masih banyak salah ke kamu, ngomelinn kamuu, buat kamu nangis, buat kamu merasaa dihakimi, atau dipojokin, dan masih banyakk lagii 😓. Ingetinn dan omonginn ke aku yaaa sengg segala sesuatu yang emangg kamu rasa, jangann dipendem sendirii biar kitaa bisa samaaa² tumbuh barengg dan ngebagunn hubungann ini dengann baikk
+            <br><br></p>
+            <p style="text-align: right; font-weight: 700; font-family: var(--font-subtitle); font-size: 1.3rem; color: var(--color-accent-deep);">
+                Forever yours,<br>
+                Udin
+            </p>
+            
+            <div class="scroll-prompt">Scroll ke bawah ehe 😋</div>
+        </section>
+
+        <section id="transition-title" class="content-section reveal-on-scroll">
+            <h3>Every moment with you is a gift. Let's take a look back...</h3>
+        </section>
+
+        <div class="memory-journey">
+
+            <section class="memory-item reveal-on-scroll">
+                <div class="photo-frame">
+                    <img src="nunus1date.jpg" alt="Kenangan 1">
+                </div>
+                <p class="caption">
+                    <strong>#First Date yang tidak direncanakan 😊🫵 (19 Oktober).</strong><br>
+                    Awal kitaa ketemuu lagii, canggung dan awkward bangett wkwwkwkk
+                </p>
+            </section>
+            
+            
+            <section class="memory-item reveal-on-scroll">
+                
+                <div class="photo-grid">
+                    <div class="photo-frame">
+                        <img src="nunus2date1.jpg" alt="Kenangan 2-1">
+                    </div>
+                    <div class="photo-frame">
+                        <img src="nunus2date2.jpg" alt="Kenangan 2-2">
+                    </div>
+                </div>
+                
+                <p class="caption">
+                    <strong>#Kali keduaa kitaa ketemuu 🤩 (25 Oktober).</strong><br>
+                    Di sini jugaaak masih canggungg bangettt, tapi diakhir dapett hug ehe
+                </p>
+            </section>
+            
+
+            <section class="memory-item reveal-on-scroll">
+                
+                <div class="photo-grid">
+                    <div class="photo-frame">
+                        <img src="nunus3date1.jpg" alt="Kenangan 3-1">
+                    </div>
+                    <div class="photo-frame">
+                        <img src="nunus3date2.jpg" alt="Kenangan 3-2">
+                    </div>
+                    <div class="photo-frame">
+                        <img src="nunus3date3.jpg" alt="Kenangan 3-3">
+                    </div>
+                    <div class="photo-frame">
+                        <img src="nunus3date4.jpg" alt="Kenangan 3-4">
+                    </div>
+                    <div class="photo-frame">
+                        <img src="nunus3date5.jpg" alt="Kenangan 3-5">
+                    </div>
+                </div>
+                
+                <p class="caption">
+                    <strong>Bocil nekat ke Tangerang 😠😠😠 (1 November).</strong><br>
+                    Momen uwu"an depan Sri dan aku baru sampee rumahh jam set2 :D
+                </p>
+            </section>
+
+
+
+            <section class="memory-item reveal-on-scroll">
+                
+                <div class="photo-grid">
+                    <div class="photo-frame">
+                        <img src="nunus4date1.jpg" alt="Kenangan 4-1">
+                    </div>
+                    <div class="photo-frame">
+                        <img src="nunus4date2.jpg" alt="Kenangan 4-2">
+                    </div>
+                </div>
+                
+                <p class="caption">
+                    <strong>Bertemu ur Ortu (Alamak takutnyoo 😢☝🏻️) (8 November).</strong><br>
+                    Ehehehehehehe YTTA 😋🤭😛🥰😘
+                </p>
+            </section>
+            
+            </div> <section id="coupon-section" class="content-section reveal-on-scroll">
+            <h2>Hadiah Ulang Tahun Tambahan Dariku!</h2>
+            <div class="coupon-grid">
+                
+                <div class="coupon reveal-on-scroll">
+                    KUPON LIFETIME UNTUK:<br><strong>Puk-Puk, Hug, dan Popo</strong><br>(Kapanpun kamu minta!)
+                </div>
+                
+                <div class="coupon reveal-on-scroll">
+                    KUPON UNTUK:<br><strong>1x Nobar tergulingnya rezim Wowok</strong><br>(Aku janji nggak tidur!)
+                </div>
+                
+                <div class="coupon reveal-on-scroll">
+                    KUPON UNTUK:<br><strong>1x cosplay menjadi sahroni</strong><br>(kamu yang kosple tapi 😛)
+                </div>
+                
+            </div>
+        </section>
+
+        <footer id="footer" class="content-section reveal-on-scroll">
+            <p>
+                Selamat ulang tahunnn sekali lagi, cintaku, cantikku, sayangku, my nunus anus.
+                <br>
+                
+            </p>
+            <div class="final-heart">❤️</div>
+        </footer>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // === 1. SKRIP TOMBOL KLIK & SURAT CINTA ===
+            const heroButton = document.getElementById('hero-button');
+            const mainStory = document.getElementById('main-story');
+            const loveLetter = document.getElementById('love-letter');
+
+            heroButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                mainStory.style.display = 'block';
+                
+                setTimeout(() => {
+                    loveLetter.classList.add('visible');
+                    loveLetter.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }, 100);
+            });
+
+            // === 2. SKRIP ANIMASI PARTIKEL (Versi Emoji) ===
+            const particleContainer = document.getElementById('particle-container');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                let particle = document.createElement('span');
+                particle.classList.add('particle');
+                
+                const hearts = ['💖', '💕', '💗', '💓', '💞', '❤️', '💝', '🐵', '🙈', '🙊', '🙉'];
+                particle.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                
+                let size = Math.random() * 1.5 + 1;
+                particle.style.fontSize = `${size}rem`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particleContainer.appendChild(particle);
+            }
+
+            // === 3. SKRIP FADE-IN SAAT SCROLL (Intersection Observer) ===
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            
+            const observerOptions = {
+                root: null,
+                threshold: 0.25,
+                rootMargin: '0px'
+            };
+
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(section => {
+                sectionObserver.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
